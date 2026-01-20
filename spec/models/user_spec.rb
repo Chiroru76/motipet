@@ -306,6 +306,67 @@ RSpec.describe User, type: :model do
     end
   end
 
+  describe ".top_users" do
+    before(:all) do
+      setup_master_data
+    end
+
+    before do
+      # テストデータ作成
+      @user1 = create(:user)
+      @user1.active_character.update!(level: 10, exp: 500, state: :alive)
+
+      @user2 = create(:user)
+      @user2.active_character.update!(level: 5, exp: 200, state: :alive)
+
+      @user3 = create(:user)
+      @user3.active_character.update!(level: 10, exp: 600, state: :alive)
+
+      @dead_user = create(:user)
+      @dead_user.active_character.update!(level: 100, exp: 9999, state: :dead)
+    end
+
+    it "レベル・経験値の降順でユーザーを取得すること" do
+      top = User.top_users(10)
+      expect(top.first).to eq(@user3)  # Lv.10, exp: 600
+      expect(top.second).to eq(@user1) # Lv.10, exp: 500
+      expect(top.third).to eq(@user2)  # Lv.5, exp: 200
+    end
+
+    it "死亡したペットを持つユーザーは除外されること" do
+      top = User.top_users(10)
+      expect(top).not_to include(@dead_user)
+    end
+
+    it "指定した件数まで取得すること" do
+      top = User.top_users(2)
+      expect(top.size).to eq(2)
+    end
+  end
+
+  describe "#ranking_position" do
+    before(:all) do
+      setup_master_data
+    end
+
+    before do
+      @user1 = create(:user)
+      @user1.active_character.update!(level: 10, exp: 500)
+
+      @user2 = create(:user)
+      @user2.active_character.update!(level: 5, exp: 200)
+    end
+
+    it "自分の順位を取得できること" do
+      expect(@user2.ranking_position).to eq(2)
+    end
+
+    it "ペットが死亡している場合はnilを返すこと" do
+      @user2.active_character.update!(state: :dead)
+      expect(@user2.ranking_position).to be_nil
+    end
+  end
+
   # ========== 基本動作 ==========
   describe "basic functionality" do
     it "有効なファクトリを持つこと" do

@@ -46,6 +46,27 @@ class User < ApplicationRecord
     SecureRandom.uuid
   end
 
+  # ランキングTOP N ユーザーを取得
+  def self.top_users(limit)
+    Rails.cache.fetch("top_users_#{limit}", expires_in: 30.minutes) do
+      User.includes(active_character: :character_kind)
+        .joins(:active_character)
+        .where(characters: { state: :alive })
+        .order("characters.level DESC , characters.exp DESC")
+        .limit(limit)
+        .to_a
+    end
+  end
+
+  # 自分の順位を取得（トップ100位以内のみ）
+  def ranking_position
+    return nil unless active_character&.alive?
+
+    top_list = User.top_users(100)
+    position = top_list.index(self)
+    position ? position + 1 : nil
+  end
+
   private
 
   def create_initial_character
