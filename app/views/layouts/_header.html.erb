@@ -39,6 +39,12 @@
           <% end %>
         </li>
         <li class="md:mx-4 my-1 md:my-0">
+          <%= link_to rankings_path, class: "flex flex-row md:flex-col items-center justify-center w-full h-full text-base font-bold text-gray-800 hover:text-yellow-700 hover:bg-yellow-50 rounded transition-colors duration-150", aria: { label: "ランキング" } do %>
+        <i class="fa-solid fa-trophy fa-2x mb-1"></i>
+        <span class="ml-2 mt-1">ランキング</span>
+          <% end %>
+        </li>
+        <li class="md:mx-4 my-1 md:my-0">
           <%= link_to settings_path, class: "flex flex-row md:flex-col items-center justify-center w-full h-full text-base font-bold text-gray-800 hover:text-yellow-700 hover:bg-yellow-50 rounded transition-colors duration-150", aria: { label: "設定" } do %>
         <i class="fa-solid fa-gear fa-2x mb-1"></i>
         <span class="ml-2 mt-1">設定</span>

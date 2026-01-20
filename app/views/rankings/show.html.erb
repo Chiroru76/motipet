@@ -1,0 +1,74 @@
+<div class="mx-auto max-w-screen-xl px-4 md:px-40 py-6">
+
+  <!-- 自分の順位カード -->
+  <% if @my_position %>
+    <div class="mb-4 p-6 bg-gradient-to-br from-yellow-50 to-yellow-100/50
+                border-2 border-yellow-300 rounded-2xl shadow-md">
+      <div class="flex items-center gap-4">
+        <div class="text-4xl font-bold text-yellow-700"><%= @my_position %></div>
+
+        <!-- ペット画像 -->
+        <div class="w-20 h-20">
+          <% my_appearance = CharacterAppearance.find_by(
+               character_kind: current_user.active_character.character_kind,
+               pose: :idle
+             ) %>
+          <%= image_tag my_appearance.asset_path,
+                        class: "w-full h-full object-contain",
+                        alt: current_user.active_character.character_kind.name %>
+        </div>
+
+        <div class="flex-1">
+          <p class="text-lg font-bold">あなたの順位</p>
+          <p class="text-sm text-gray-600">
+            <%= current_user.active_character.character_kind.name %>
+            Lv.<%= current_user.active_character.level %>
+          </p>
+        </div>
+      </div>
+    </div>
+  <% end %>
+
+  <!-- ランキングリスト -->
+  <div class="space-y-3 mb-8">
+    <% @top_users.each_with_index do |user, index| %>
+      <% rank = (@top_users.current_page - 1) * @top_users.limit_value + index + 1 %>
+      <div class="<%= user == current_user ? 'bg-yellow-50 border-yellow-300' : 'bg-white border-slate-100' %>
+                  rounded-2xl border shadow-sm hover:shadow-md transition-all p-4">
+        <div class="flex items-center gap-4">
+          <!-- 順位 -->
+          <div class="text-2xl font-bold
+                      <%= rank <= 3 ? 'text-yellow-600' : 'text-gray-500' %>
+                      w-12 text-center">
+            <%= rank %>
+          </div>
+
+          <!-- ペット画像 -->
+          <div class="w-20 h-20">
+            <% appearance = CharacterAppearance.find_by(
+                 character_kind: user.active_character.character_kind,
+                 pose: :idle
+               ) %>
+            <%= image_tag appearance.asset_path,
+                          class: "w-full h-full object-contain" %>
+          </div>
+
+          <!-- ユーザー情報 -->
+          <div class="flex-1">
+            <p class="font-bold text-gray-900"><%= user.name %></p>
+            <p class="text-sm text-gray-600">
+
+              <%= user.active_character.character_kind.name %>
+              Lv.<%= user.active_character.level %>
+            </p>
+          </div>
+        </div>
+      </div>
+    <% end %>
+  </div>
+
+  <!-- ページネーション -->
+  <div class="flex justify-center mt-6">
+    <%= paginate @top_users %>
+  </div>
+</div>
