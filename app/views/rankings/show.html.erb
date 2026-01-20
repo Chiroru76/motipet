@@ -17,16 +17,17 @@
   <% end %>
 
   <!-- ランキングリスト -->
-  <div class="space-y-3">
+  <div class="space-y-3 mb-8">
     <% @top_users.each_with_index do |user, index| %>
+      <% rank = (@top_users.current_page - 1) * @top_users.limit_value + index + 1 %>
       <div class="<%= user == current_user ? 'bg-yellow-50 border-yellow-300' : 'bg-white border-slate-100' %>
                   rounded-2xl border shadow-sm hover:shadow-md transition-all p-4">
         <div class="flex items-center gap-4">
           <!-- 順位 -->
           <div class="text-2xl font-bold
-                      <%= index < 3 ? 'text-yellow-600' : 'text-gray-500' %>
+                      <%= rank <= 3 ? 'text-yellow-600' : 'text-gray-500' %>
                       w-12 text-center">
-            <%= index + 1 %>
+            <%= rank %>
           </div>
 
           <!-- ペット画像 -->
@@ -51,5 +52,10 @@
         </div>
       </div>
     <% end %>
+  </div>
+
+  <!-- ページネーション -->
+  <div class="flex justify-center mt-6">
+    <%= paginate @top_users %>
   </div>
 </div>
