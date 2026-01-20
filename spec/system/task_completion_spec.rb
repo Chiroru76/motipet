@@ -80,6 +80,9 @@ RSpec.describe 'タスク完了', type: :system do
         click_button '記録する'
       end
 
+      # Turbo Streamでの更新を待つ
+      sleep 0.5
+
       user.reload
       expect(user.active_character.exp).to be > initial_exp
       expect(user.food_count).to be > initial_food
