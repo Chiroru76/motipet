@@ -34,7 +34,7 @@ RSpec.describe 'キャラクター孵化・進化', type: :system do
       expect(page).to have_current_path(share_hatched_path(character_id: character.id))
       expect(page).to have_content('誕生しました')
 
-      click_link 'OK'
+      click_link 'ダッシュボードへ'
 
       # ダッシュボードに戻る
       expect(page).to have_current_path(dashboard_show_path)
@@ -71,7 +71,7 @@ RSpec.describe 'キャラクター孵化・進化', type: :system do
       expect(page).to have_current_path(share_evolved_path(character_id: character.id))
       expect(page).to have_content('進化しました')
 
-      click_link 'OK'
+      click_link 'ダッシュボードへ'
 
       # ダッシュボードに戻る
       expect(page).to have_current_path(dashboard_show_path)
