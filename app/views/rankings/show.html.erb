@@ -6,9 +6,22 @@
                 border-2 border-yellow-300 rounded-2xl shadow-md">
       <div class="flex items-center gap-4">
         <div class="text-4xl font-bold text-yellow-700"><%= @my_position %></div>
+
+        <!-- ペット画像 -->
+        <div class="w-20 h-20">
+          <% my_appearance = CharacterAppearance.find_by(
+               character_kind: current_user.active_character.character_kind,
+               pose: :idle
+             ) %>
+          <%= image_tag my_appearance.asset_path,
+                        class: "w-full h-full object-contain",
+                        alt: current_user.active_character.character_kind.name %>
+        </div>
+
         <div class="flex-1">
           <p class="text-lg font-bold">あなたの順位</p>
           <p class="text-sm text-gray-600">
+            <%= current_user.active_character.character_kind.name %>
             Lv.<%= current_user.active_character.level %>
           </p>
         </div>
