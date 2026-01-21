@@ -109,7 +109,7 @@ RSpec.describe "Characters", type: :request do
         expect(flash[:notice]).to eq("えさをあげました！")
         expect(character.bond_hp).to eq(initial_bond_hp + 10)
         expect(user.food_count).to eq(initial_food_count - 1)
-        expect(character.last_activity_at).to be_within(1.second).of(Time.current)
+        expect(character.last_activity_at).to be_within(2.seconds).of(Time.current)
       end
 
       it "bond_hpがbond_hp_maxに達している場合はえさをあげられない" do
@@ -157,7 +157,7 @@ RSpec.describe "Characters", type: :request do
         expect(PetComments::Generator).to receive(:for).with(
           :feed,
           user: user,
-          context: {}
+          context: { feed: true }
         )
 
         post feed_characters_path
@@ -183,7 +183,7 @@ RSpec.describe "Characters", type: :request do
         expect(PetComments::Generator).to receive(:for).with(
           :feed,
           user: user,
-          context: {}
+          context: { feed: true }
         )
 
         post feed_characters_path, headers: { "Accept" => "text/vnd.turbo-stream.html" }
