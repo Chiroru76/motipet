@@ -40,9 +40,9 @@ class CharactersController < ApplicationController
     respond_to do |format|
       format.html { redirect_to dashboard_show_path }
       format.turbo_stream do
-        flash.now[:notice] = flash[:notice] if flash[:notice]
-        flash.now[:alert] = flash[:alert] if flash[:alert]
-        flash.now[:pet_comment] = flash[:pet_comment] if flash[:pet_comment]
+        flash.now[:notice] = flash[:notice]
+        flash.now[:alert] = flash[:alert]
+        flash.now[:pet_comment] = flash[:pet_comment]
       end
     end
   end
