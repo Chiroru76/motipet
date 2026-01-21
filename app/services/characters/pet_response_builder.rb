@@ -4,7 +4,7 @@ module Characters
   class PetResponseBuilder
     attr_reader :character, :growth_result, :event_context
 
-    def initialize(character:, growth_result:, event_context: {})
+    def initialize(character:, growth_result: {}, event_context: {})
       @character = character
       @growth_result = growth_result
       @event_context = event_context
@@ -35,6 +35,8 @@ module Characters
     def determine_event
       if growth_result[:leveled_up]
         :level_up
+      elsif event_context[:feed]
+        :feed
       elsif event_context[:task_completed]
         :task_completed
       elsif event_context[:task_logged]
