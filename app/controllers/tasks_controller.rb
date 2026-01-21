@@ -64,7 +64,7 @@ class TasksController < ApplicationController
       format.html { redirect_to dashboard_show_path, notice: result.notice }
       format.turbo_stream do
         flash.now[:notice] = result.notice
-        flash.now[:pet_comment] = result.pet_comment if result.pet_comment
+        flash.now[:pet_comment] = result.pet_comment
         @unlocked_titles = result.unlocked_titles
         @appearance = result.appearance
         @task = result.task
@@ -92,7 +92,7 @@ class TasksController < ApplicationController
       f.html { redirect_to dashboard_show_path, notice: result.notice }
       f.turbo_stream do
         flash.now[:notice] = result.notice
-        flash.now[:pet_comment] = result.pet_comment if result.pet_comment
+        flash.now[:pet_comment] = result.pet_comment
         @appearance = result.appearance
         render locals: { hatched: result.hatched?, evolved: result.evolved? }
       end
