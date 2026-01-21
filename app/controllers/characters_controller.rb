@@ -27,22 +27,22 @@ class CharactersController < ApplicationController
     elsif current_user.food_count < 1
       flash[:alert] = "えさがありません"
     elsif @character.feed!(current_user)
-      # えさやり成功時のペットコメント生成
-      pet_comment = PetComments::Generator.for(
-        :feed,
-        user: current_user,
-        context: {}
-      )
-      flash[:pet_comment] = pet_comment if pet_comment.present?
+      # えさやり成功時のペットの反応を生成
+      response = Characters::PetResponseBuilder.new(
+        character: @character,
+        event_context: { feed: true }
+      ).build
+
+      flash[:pet_comment] = response[:comment] if response[:comment].present?
       flash[:notice] = "えさをあげました！"
     end
 
     respond_to do |format|
       format.html { redirect_to dashboard_show_path }
       format.turbo_stream do
-        flash.now[:notice] = flash[:notice] if flash[:notice]
-        flash.now[:alert] = flash[:alert] if flash[:alert]
-        flash.now[:pet_comment] = flash[:pet_comment] if flash[:pet_comment]
+        flash.now[:notice] = flash[:notice]
+        flash.now[:alert] = flash[:alert]
+        flash.now[:pet_comment] = flash[:pet_comment]
       end
     end
   end
