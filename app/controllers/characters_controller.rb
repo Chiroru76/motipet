@@ -27,13 +27,13 @@ class CharactersController < ApplicationController
     elsif current_user.food_count < 1
       flash[:alert] = "えさがありません"
     elsif @character.feed!(current_user)
-      # えさやり成功時のペットコメント生成
-      pet_comment = PetComments::Generator.for(
-        :feed,
-        user: current_user,
-        context: {}
-      )
-      flash[:pet_comment] = pet_comment if pet_comment.present?
+      # えさやり成功時のペットの反応を生成
+      response = Characters::PetResponseBuilder.new(
+        character: @character,
+        event_context: { feed: true }
+      ).build
+
+      flash[:pet_comment] = response[:comment] if response[:comment].present?
       flash[:notice] = "えさをあげました！"
     end
 
