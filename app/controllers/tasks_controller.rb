@@ -117,6 +117,7 @@ class TasksController < ApplicationController
       :reward_exp, :reward_food_count,
       :difficulty, :target_value, :target_unit, :target_period, :tag,
       :tracking_mode,
+      :location_enabled, :location_address, :place_id, :latitude, :longitude,
       repeat_rule: { days: [] }
     ).tap { |p| p[:repeat_rule] ||= {} }
   end
@@ -127,6 +128,7 @@ class TasksController < ApplicationController
       :title, :due_on,
       :reward_exp, :reward_food_count,
       :difficulty, :target_value, :target_unit, :target_period, :tag,
+      :location_enabled, :location_address, :place_id, :latitude, :longitude,
       repeat_rule: { days: [] }
     ).tap { |p| p[:repeat_rule] ||= {} }
   end

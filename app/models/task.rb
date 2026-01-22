@@ -25,6 +25,12 @@ class Task < ApplicationRecord
   validates :reward_exp, numericality: { greater_than_or_equal_to: 0 }, allow_nil: true
   validates :reward_food_count, numericality: { greater_than_or_equal_to: 0 }, allow_nil: true
   validates :tracking_mode, presence: true, if: :habit?
+  # 位置情報
+  validates :location_address, length: { maximum: 255 }, allow_blank: true
+  validates :place_id, uniqueness: { scope: :user_id, allow_nil: true }
+  # place_idが変更された場合のみジオコーディング実行
+  after_validation :geocode_with_error_handling, if: :should_geocode?
+
 
   # 作成イベントを明示で残すメソッド
   def log_created!(by_user:)
@@ -138,5 +144,26 @@ class Task < ApplicationRecord
 
   def give_food_to_user
     user.increment!(:food_count, reward_food_count)
+  end
+
+  # ---- ジオコーディング関連 ----
+  def should_geocode?
+    place_id_changed? && place_id.present?
+  end
+
+  def geocode_with_error_handling
+    begin
+      results = Geocoder.search("place_id:#{place_id}")
+      if results.present?
+        location = results.first
+        self.latitude = location.latitude
+        self.longitude = location.longitude
+        self.location_address = location.address
+      else
+        errors.add(:base, "指定された場所IDに対応する位置情報が見つかりません。")
+      end
+    rescue StandardError => e
+      errors.add(:base, "ジオコーディング中にエラーが発生しました: #{e.message}")
+    end
   end
 end
