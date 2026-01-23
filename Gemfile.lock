@@ -217,7 +217,7 @@ GEM
       letter_opener (~> 1.9)
       railties (>= 6.1)
       rexml
-    line-bot-api (2.5.0)
+    line-bot-api (2.6.1)
       base64 (~> 0.2)
       multipart-post (~> 2.4)
     lint_roller (1.1.0)
