@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[8.1].define(version: 2026_01_21_235121) do
+ActiveRecord::Schema[8.1].define(version: 2026_01_24_084500) do
   # These are extensions that must be enabled in order to support this database
   enable_extension "pg_catalog.plpgsql"
 
@@ -46,6 +46,7 @@ ActiveRecord::Schema[8.1].define(version: 2026_01_21_235121) do
     t.datetime "updated_at", null: false
     t.bigint "user_id", null: false
     t.index ["character_kind_id"], name: "index_characters_on_character_kind_id"
+    t.index ["state", "dead_at"], name: "idx_characters_state_dead_at"
     t.index ["user_id"], name: "index_characters_on_user_id"
   end
 
@@ -64,6 +65,7 @@ ActiveRecord::Schema[8.1].define(version: 2026_01_21_235121) do
     t.integer "xp_amount", default: 0, null: false
     t.index ["awarded_character_id"], name: "index_task_events_on_awarded_character_id"
     t.index ["task_id"], name: "index_task_events_on_task_id"
+    t.index ["user_id", "action"], name: "idx_task_events_user_action"
     t.index ["user_id", "occurred_at"], name: "index_task_events_on_user_id_and_occurred_at"
     t.index ["user_id", "task_kind", "occurred_at"], name: "index_task_events_on_user_id_and_task_kind_and_occurred_at"
     t.index ["user_id"], name: "index_task_events_on_user_id"
@@ -92,9 +94,11 @@ ActiveRecord::Schema[8.1].define(version: 2026_01_21_235121) do
     t.integer "tracking_mode"
     t.datetime "updated_at", null: false
     t.bigint "user_id", null: false
+    t.index ["due_on", "status"], name: "idx_tasks_due_status"
     t.index ["kind", "tracking_mode"], name: "index_tasks_on_kind_and_tracking_mode"
     t.index ["latitude", "longitude"], name: "index_tasks_on_latitude_and_longitude"
     t.index ["place_id"], name: "index_tasks_on_place_id"
+    t.index ["user_id", "kind", "status"], name: "idx_tasks_user_kind_status"
     t.index ["user_id"], name: "index_tasks_on_user_id"
   end
 
