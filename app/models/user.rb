@@ -49,7 +49,7 @@ class User < ApplicationRecord
   # ランキングTOP N ユーザーを取得
   def self.top_users(limit = 1000)
     Rails.cache.fetch("top_users_#{limit}", expires_in: 30.minutes) do
-      User.includes(active_character: :character_kind)
+      User.includes(active_character: { character_kind: :character_appearances })
         .joins(:active_character)
         .where(characters: { state: :alive })
         .order("characters.level DESC , characters.exp DESC")

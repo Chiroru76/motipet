@@ -9,10 +9,7 @@
 
         <!-- ペット画像 -->
         <div class="w-20 h-20">
-          <% my_appearance = CharacterAppearance.find_by(
-               character_kind: current_user.active_character.character_kind,
-               pose: :idle
-             ) %>
+          <% my_appearance = current_user.active_character.character_kind.character_appearances.find { |a| a.idle? } %>
           <%= image_tag my_appearance.asset_path,
                         class: "w-full h-full object-contain",
                         alt: current_user.active_character.character_kind.name %>
@@ -45,10 +42,7 @@
 
           <!-- ペット画像 -->
           <div class="w-20 h-20">
-            <% appearance = CharacterAppearance.find_by(
-                 character_kind: user.active_character.character_kind,
-                 pose: :idle
-               ) %>
+            <% appearance = user.active_character.character_kind.character_appearances.find { |a| a.idle? } %>
             <%= image_tag appearance.asset_path,
                           class: "w-full h-full object-contain" %>
           </div>
