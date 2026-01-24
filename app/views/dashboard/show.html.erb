@@ -5,12 +5,12 @@
   <!-- キャラ育成エリア -->
   <div class="pt-3 pb-2">
   <div id="character_" class="relative w-full max-w-none md:max-w-[500px] mx-auto h-auto p-2 bg-gray-200 border-4 border-gray-800 shadow-[4px_4px_0_0_rgba(0,0,0,0.8)] rounded-lg">
-    <% if current_user.active_character.dead? %>
+    <% if @character&.dead? %>
       <!-- 死亡時専用ビュー -->
       <div class="bg-black w-full h-full flex flex-col items-center justify-center rounded-2xl p-8 text-center">
         <%= image_tag "death.png", alt: "十字架", width: 200, height: 200, class: "mx-auto mb-4" %>
         <p class="text-white text-xl font-bold">
-          <%= current_user.active_character.character_kind&.name %> は死亡しました。
+          <%= @character.character_kind&.name %> は死亡しました。
         </p>
 
         <%= button_to "リセットする", reset_characters_path, method: :post, class: "mt-3 rounded-lg bg-pink-600 px-4 py-2 text-white hover:bg-pink-700" %>
@@ -36,9 +36,9 @@
         </div>
 
         <!-- ステータス -->
-        <% if current_user.active_character.present?  %>
+        <% if @character.present? %>
           <div class="min-w-0 w-35 md:w-1/2 max-h-45 md:max-h-72 overflow-auto  bg-white p-4 rounded-lg shadow">
-            <%= render "characters/status", character: current_user.active_character %>
+            <%= render "characters/status", character: @character %>
           </div>
         <% end %>
       </div>
