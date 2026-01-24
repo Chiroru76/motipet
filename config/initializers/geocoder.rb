@@ -3,7 +3,7 @@ Geocoder.configure(
   lookup: :google,
 
   # APIキー（サーバー用）
-  api_key: Rails.application.config.google_maps[:api_key_backend],
+  api_key: ENV.fetch("GOOGLE_MAPS_API_KEY_BACKEND", nil),
 
   # タイムアウト設定
   timeout: 5,
@@ -15,7 +15,7 @@ Geocoder.configure(
   region: :jp,
 
   # キャッシング（Redis使用）
-  cache: Redis.new(url: ENV.fetch("REDIS_URL", "redis://redis:6379/1")),
+  cache: -> { Redis.new(url: ENV.fetch("REDIS_URL", "redis://redis:6379/1")) },
   cache_prefix: "geocoder:",
 
   # キャッシュ有効期限
