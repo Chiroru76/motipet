@@ -31,7 +31,6 @@ class Task < ApplicationRecord
   # place_idが変更された場合のみジオコーディング実行
   after_validation :geocode_with_error_handling, if: :should_geocode?
 
-
   # 作成イベントを明示で残すメソッド
   def log_created!(by_user:)
     task_events.create!(
@@ -152,18 +151,16 @@ class Task < ApplicationRecord
   end
 
   def geocode_with_error_handling
-    begin
-      results = Geocoder.search("place_id:#{place_id}")
-      if results.present?
-        location = results.first
-        self.latitude = location.latitude
-        self.longitude = location.longitude
-        self.location_address = location.address
-      else
-        errors.add(:base, "指定された場所IDに対応する位置情報が見つかりません。")
-      end
-    rescue StandardError => e
-      errors.add(:base, "ジオコーディング中にエラーが発生しました: #{e.message}")
+    results = Geocoder.search("place_id:#{place_id}")
+    if results.present?
+      location = results.first
+      self.latitude = location.latitude
+      self.longitude = location.longitude
+      self.location_address = location.address
+    else
+      errors.add(:base, "指定された場所IDに対応する位置情報が見つかりません。")
     end
+  rescue StandardError => e
+    errors.add(:base, "ジオコーディング中にエラーが発生しました: #{e.message}")
   end
 end
