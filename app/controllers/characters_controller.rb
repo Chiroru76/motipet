@@ -7,7 +7,7 @@ class CharactersController < ApplicationController
       .where.not(character_kinds: { stage: "egg" }) # 卵は除く
       .select("DISTINCT ON (character_kinds.id) characters.*")
       .order("character_kinds.id, characters.created_at DESC")
-      .includes(:character_kind)
+      .includes(character_kind: :character_appearances)
   end
 
   def show

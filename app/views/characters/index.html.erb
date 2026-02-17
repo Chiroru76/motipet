@@ -4,7 +4,7 @@
 
 <div class="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-4 gap-4 md:gap-6">
   <% @characters.each do |c| %>
-    <% appearance = CharacterAppearance.find_by(character_kind: c.character_kind, pose: :idle) %>
+    <% appearance = c.character_kind.character_appearances.find { |a| a.idle? } %>
 
     <!-- キャラクターカード -->
     <%= link_to character_path(c), data: { turbo_frame: "character_modal" },
